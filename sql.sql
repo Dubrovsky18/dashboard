@@ -1,4 +1,3 @@
-
 drop materialized view if exists prod.mv_shelve_count cascade;
 CREATE MATERIALIZED VIEW prod.mv_shelve_count AS
 SELECT
