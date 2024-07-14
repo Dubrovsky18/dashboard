@@ -3,7 +3,7 @@ CREATE MATERIALIZED VIEW small.mv_external_supplies AS
 SELECT
     es.finish_date AS date,
     c.name AS category_name,
-    esp.product_count AS sum_products_finish_date
+    SUM(esp.product_count) AS sum_products_finish_date
 FROM
     external_supplies es
     LEFT JOIN external_supplies_products esp ON esp.ext_supply_id = es.ext_supply_id
@@ -51,7 +51,7 @@ CREATE MATERIALIZED VIEW prod.mv_external_supplies AS
 SELECT
     es.finish_date AS date,
     c.name AS category_name,
-    esp.product_count AS sum_products_finish_date
+    SUM(esp.product_count) AS sum_products_finish_date
 FROM
     external_supplies es
     LEFT JOIN external_supplies_products esp ON esp.ext_supply_id = es.ext_supply_id
