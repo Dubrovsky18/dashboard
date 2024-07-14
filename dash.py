@@ -133,3 +133,10 @@ elapsed_time = time.time() - start_time
 print(elapsed_time)
 st.write(f"Время выполнения: {elapsed_time:.2f} секунд")
 st.area_chart(data)
+
+query_refresh =  """
+    REFRESH MATERIALIZED VIEW mv_shelve_count; 
+    REFRESH MATERIALIZED VIEW mv_external_supplies;
+    REFRESH MATERIALIZED VIEW mv_product_summary;
+    """
+external_supplies_data = execute_query(query_refresh, conn)
