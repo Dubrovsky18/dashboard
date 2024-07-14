@@ -31,7 +31,7 @@ GROUP BY
 
 drop materialized view if exists small.mv_shelve_count cascade;
 CREATE MATERIALIZED VIEW small.mv_shelve_count AS
-    SELECT c.name AS category_name, SUM(pos.product_count) AS shelve_count
+    SELECT c.name AS category_name, SUM(pos.product_count) AS shelves_count
     FROM products_on_shelves pos
         JOIN product_categories pc ON pos.product_id = pc.product_id
         JOIN categories c ON pc.category_id = c.category_id
@@ -40,7 +40,7 @@ CREATE MATERIALIZED VIEW small.mv_shelve_count AS
 
 drop materialized view if exists prod.mv_shelve_count cascade;
 CREATE MATERIALIZED VIEW prod.mv_shelve_count AS
-SELECT c.name AS category_name, SUM(pos.product_count) AS shelve_count
+SELECT c.name AS category_name, SUM(pos.product_count) AS shelves_count
 FROM products_on_shelves pos
          JOIN product_categories pc ON pos.product_id = pc.product_id
          JOIN categories c ON pc.category_id = c.category_id
