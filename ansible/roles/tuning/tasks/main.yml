@@ -3,3 +3,9 @@
   template:
     src: perf.conf.j2
     dest: /etc/postgresql/16/main/conf.d/perf.conf
+    owner: postgres
+    group: postgres
+
+- name: restart postgres
+  service: name=postgresql state=restarted
+  tags: restart-pgsql

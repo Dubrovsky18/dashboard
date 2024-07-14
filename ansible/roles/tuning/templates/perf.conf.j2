@@ -1,24 +1,23 @@
 
-hared_buffers = 1GB # Выделенная память под кэширование данных PostgreSQL.
-max_connections = 1024 # Максимальное количество коннектов одновременно
-effective_cache_size = 512MB # Доступный кэш файловой системы для планировщика.
+hared_buffers = 1GB
+max_connections = 1024
+effective_cache_size = 512MB
 
-work_mem = 254MB # Количество памяти для сортировки и хеш-таблиц перед записью на диск.
-max_worker_processes = 4 # Максимальное количество рабочих процессов.
-max_parallel_workers = 4 # Максимальное количество воркеров, работающих параллельно
-max_parallel_maintenance_workers = 4 # Максимальное число рабочих процессов, которые могут запускаться одной служебной командой.
-max_parallel_workers_per_gather = 4 # Максимальное количество рабочих процессов, используемых для операций GATHER во время выполнения запросов.
-maintenance_work_mem = 1GB # Количество памяти для операций обслуживания таких как VACUUM и CREATE INDEX.
+work_mem = 254MB
+max_worker_processes = 4
+max_parallel_workers = 4
+max_parallel_maintenance_workers = 4
+max_parallel_workers_per_gather = 4
+maintenance_work_mem = 1GB
 
-checkpoint_completion_target = 0.9 # Как быстро выполнять контрольные точки
-checkpoint_timeout = 20min # Время между контрольными точками
-default_statistics_target = 300 # Устанавливает значение ориентира статистики по умолчанию, распространяющееся на столбцы.
-random_page_cost = 1.0 # Оценка стоимости случайного чтения страницы.
-effective_io_concurrency = 500 # Количество одновременных операций ввода-вывода, которое может использовать PostgreSQL.
-synchronous_commit = off # Синхронизация транзакций для уменьшения рисков потери
-huge_pages = off # Будут ли храниться большие страницы
-wal_buffers = 64MB # Количество памяти под буферы журнала транзакций (WAL).
-temp_buffers = 64MB #  Количество памяти под временные таблицы.
-#Минимальный и максимальный размер WAL (журнала транзакций).
+checkpoint_completion_target = 0.9
+checkpoint_timeout = 20min
+default_statistics_target = 300
+random_page_cost = 1.0
+effective_io_concurrency = 500
+synchronous_commit = off
+huge_pages = off
+wal_buffers = 64MB
+temp_buffers = 64MB
 min_wal_size = 256MB
 max_wal_size = 1GB
