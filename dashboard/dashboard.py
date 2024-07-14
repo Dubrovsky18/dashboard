@@ -3,7 +3,7 @@ import pandas as pd
 import psycopg2
 import streamlit as st
 import time
-from sshtunnel import SSHTunnelForwarder
+# from sshtunnel import SSHTunnelForwarder
 
 # tunnel = SSHTunnelForwarder(
 #     ('62.84.126.82', 22),
