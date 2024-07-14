@@ -4,18 +4,18 @@ conn_small = psycopg2.connect(
     database='appdb',
     user='app',
     password='verysecretpassword',
-    host='locahost',
+    host='62.84.126.82',
     port=5432,
-    options=f'-c search_path={'small'}'
+    options=f'-c search_path=small'
 )
 
 conn_prod = psycopg2.connect(
     database='appdb',
     user='app',
     password='verysecretpassword',
-    host='localhost',
+    host='62.84.126.82',
     port=5432,
-    options=f'-c search_path={'prod'}'
+    options=f'-c search_path=prod'
 )
 
 

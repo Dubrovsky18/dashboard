@@ -14,7 +14,7 @@ def connection_to_database(schema):
         database='appdb',
         user='app',
         password='verysecretpassword',
-        host='locahost',
+        host='62.84.126.82',
         port=5432,
         options=f'-c search_path={schema}'
     )
