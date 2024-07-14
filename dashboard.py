@@ -4,7 +4,7 @@ import psycopg2
 import streamlit as st
 import time
 # from sshtunnel import SSHTunnelForwarder
-
+#
 # tunnel = SSHTunnelForwarder(
 #     ('62.84.126.82', 22),
 #     ssh_username='dubrovin02',
@@ -13,14 +13,7 @@ import time
 # )
 # tunnel.start()
 
-# conn = psycopg2.connect(
-#     database='appdb',
-#     user='app',
-#     password='verysecretpassword',
-#     host=tunnel.local_bind_host,
-#     port=tunnel.local_bind_port,
-#     options=f'-c search_path={schema}'
-# )
+
 
 
 def execute_query(sql_query, conn):
@@ -48,7 +41,7 @@ ORDER BY category_name ASC;
 
 
 
-schema = st.selectbox('Select schema', ('small', 'prod'), key='schema_selector')
+schema = st.selectbox('Select schema', ('prod', 'small'), key='schema_selector')
 
 start_time = time.time()
 
@@ -61,7 +54,14 @@ conn = psycopg2.connect(
     options=f'-c search_path={schema}'
 )
 
-
+# conn = psycopg2.connect(
+#     database='appdb',
+#     user='app',
+#     password='verysecretpassword',
+#     host=tunnel.local_bind_host,
+#     port=tunnel.local_bind_port,
+#     options=f'-c search_path={schema}'
+# )
 
 external_supplies_data = execute_query(query_external_supplies, conn)
 checks_data = execute_query(query_checks, conn)
@@ -110,6 +110,8 @@ diffs = {}
 offset = 0
 
 for event_date in reversed(sorted(events.keys())):
+
+
     day_events = events[event_date]
     if offset != 0:
         for category in graph_data:
@@ -126,16 +128,8 @@ for event_date in reversed(sorted(events.keys())):
                 diffs[category] = 0
             diffs[category] -= event['data']['product_count']
     offset += 1
-
 data = pd.DataFrame(data=graph_data, index=index)
 elapsed_time = time.time() - start_time
 print(elapsed_time)
 st.write(f"Время выполнения: {elapsed_time:.2f} секунд")
 st.area_chart(data)
-
-query_refresh =  """
-    REFRESH MATERIALIZED VIEW mv_shelve_count; 
-    REFRESH MATERIALIZED VIEW mv_external_supplies;
-    REFRESH MATERIALIZED VIEW mv_product_summary;
-    """
-external_supplies_data = execute_query(query_refresh, conn)

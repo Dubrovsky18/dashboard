@@ -78,4 +78,3 @@ GROUP BY
     c.issue_date, cat.name;
 
 
-
