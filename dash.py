@@ -65,14 +65,14 @@ GROUP BY
     c.name;
         """
 
-tunnel = SSHTunnelForwarder(
-    ('62.84.126.82', 22),
-    ssh_username='dubrovin02',
-    ssh_private_key='/Users/test/.ssh/id_rsa',
-    remote_bind_address=('localhost', 5432),
-)
+# tunnel = SSHTunnelForwarder(
+#     ('62.84.126.82', 22),
+#     ssh_username='dubrovin02',
+#     ssh_private_key='/Users/test/.ssh/id_rsa',
+#     remote_bind_address=('localhost', 5432),
+# )
 
-tunnel.start()
+# tunnel.start()
 
 
 
@@ -80,23 +80,23 @@ schema = st.selectbox('Select schema', ('small', 'prod'), key='schema_selector')
 
 start_time = time.time()
 
-# conn = psycopg2.connect(
-#     database='appdb',
-#     user='app',
-#     password='verysecretpassword',
-#     host='localhost',
-#     port=5432,
-#     options=f'-c search_path={schema}'
-# )
-
 conn = psycopg2.connect(
     database='appdb',
     user='app',
     password='verysecretpassword',
-    host=tunnel.local_bind_host,
-    port=tunnel.local_bind_port,
+    host='localhost',
+    port=5432,
     options=f'-c search_path={schema}'
 )
+
+# conn = psycopg2.connect(
+#     database='appdb',
+#     user='app',
+#     password='verysecretpassword',
+#     host=tunnel.local_bind_host,
+#     port=tunnel.local_bind_port,
+#     options=f'-c search_path={schema}'
+# )
 
 external_supplies_data = execute_query(query_external_supplies, conn)
 checks_data = execute_query(query_checks, conn)
