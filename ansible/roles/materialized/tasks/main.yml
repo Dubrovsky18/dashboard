@@ -1,0 +1,16 @@
+---
+- name: Create Materialized view
+  community.postgresql.postgresql_query:
+    login_host: "{{ db_ip }}"
+    port: "{{ db_port }}"
+    db: "{{ db_name }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_password }}"
+    query: "{{ item.query }}"
+    search_path: "{{ schema }}"
+  with_items:
+    - { query: "CREATE MATERIALIZED VIEW mv_shelve_count AS SELECT c.name AS category_name, SUM(pos.product_count) AS shelve_count FROM products_on_shelves pos JOIN product_categories pc ON pos.product_id = pc.product_id JOIN categories c ON pc.category_id = c.category_id GROUP BY c.name;" }
+    - { query: "CREATE MATERIALIZED VIEW mv_external_supplies AS SELECT es.finish_date AS date, c.name AS category_name FROM external_supplies es LEFT JOIN external_supplies_products esp ON esp.ext_supply_id = es.ext_supply_id LEFT JOIN product_categories pc ON esp.product_id = pc.product_id LEFT JOIN categories c ON pc.category_id = c.category_id GROUP BY es.finish_date, c.name ORDER BY es.finish_date ASC;" }
+    - { query: "CREATE MATERIALIZED VIEW mv_product_summary AS SELECT c.issue_date AS date, cat.name AS category_name, SUM(pcp.product_count) AS sum_products_issue_date FROM checks c LEFT JOIN product_check_positions pcp ON pcp.check_id = c.check_id LEFT JOIN product_categories pc ON pcp.product_id = pc.product_id LEFT JOIN categories cat ON pc.category_id = cat.category_id GROUP BY c.issue_date, cat.name;" }
+  ignore_errors: True
+  tags: create-materialized-view

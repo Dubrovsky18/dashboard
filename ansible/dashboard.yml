@@ -1,0 +1,24 @@
+---
+- name: Create PK and FK for tables and index
+  hosts: db_servers
+  roles:
+    - keys_and_index
+  vars:
+    schema: prod
+  tags: index
+  
+- name: Create MATERIALIZED VIEW
+  hosts: db_servers
+  roles:
+    - materialized
+  vars:
+    schema: prod
+  tags: materialized-view
+
+- name: Mod database
+  hosts: db_servers
+  roles:
+    - tuning
+  vars:
+    schema: prod
+  tags: mod-database

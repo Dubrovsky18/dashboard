@@ -1,0 +1,80 @@
+---
+- name: Create primary keys
+  community.postgresql.postgresql_query:
+    login_host: "{{ db_ip }}"
+    port: "{{ db_port }}"
+    db: "{{ db_name }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_password }}"
+    query: "{{ item.query }}"
+    search_path: "{{ schema }}"
+  with_items:
+    - { query: "ALTER TABLE categories ADD PRIMARY KEY (category_id);" }
+    - { query: "ALTER TABLE checks ADD PRIMARY KEY (check_id);" }
+    - { query: "ALTER TABLE external_supplies ADD PRIMARY KEY (ext_supply_id);" }
+    - { query: "ALTER TABLE locations ADD PRIMARY KEY (location_id);" }
+    - { query: "ALTER TABLE supplies ADD PRIMARY KEY (supply_id);" }
+    - { query: "ALTER TABLE products ADD PRIMARY KEY (product_id);" }
+    - { query: "ALTER TABLE warehouses ADD PRIMARY KEY (warehouse_id);" }
+    - { query: "ALTER TABLE stores ADD PRIMARY KEY (store_id);" }
+    - { query: "ALTER TABLE shelves ADD PRIMARY KEY (shelve_id);" }
+  ignore_errors: True
+  tags: create-primary-key
+      
+- name: Create foreign keys
+  community.postgresql.postgresql_query:
+    login_host: "{{ db_ip }}"
+    port: "{{ db_port }}"
+    db: "{{ db_name }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_password }}"
+    search_path: "{{ schema }}"
+    query: "{{ item.query }}"
+  with_items:
+    - { query: "ALTER TABLE checks_stores ADD CONSTRAINT fk_checks_stores_check FOREIGN KEY (check_id) REFERENCES checks (check_id), ADD CONSTRAINT fk_checks_stores_store FOREIGN KEY (store_id) REFERENCES stores (store_id);" }
+    - { query: "ALTER TABLE supplies_stores ADD CONSTRAINT fk_supplies_stores_supply FOREIGN KEY (supply_id) REFERENCES supplies (supply_id), ADD CONSTRAINT fk_supplies_stores_store FOREIGN KEY (store_id) REFERENCES stores (store_id);" }
+    - { query: "ALTER TABLE warehouse_shelves ADD CONSTRAINT fk_warehouse_shelves_shelve FOREIGN KEY (shelve_id) REFERENCES shelves (shelve_id), ADD CONSTRAINT fk_warehouse_shelves_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id);" }
+    - { query: "ALTER TABLE product_categories ADD CONSTRAINT fk_product_categories_product FOREIGN KEY (product_id) REFERENCES products (product_id), ADD CONSTRAINT fk_product_categories_category FOREIGN KEY (category_id) REFERENCES categories (category_id);" }
+    - { query: "ALTER TABLE warehouse_locations ADD CONSTRAINT fk_warehouse_locations_location FOREIGN KEY (location_id) REFERENCES locations (location_id), ADD CONSTRAINT fk_warehouse_locations_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id);" }
+    - { query: "ALTER TABLE store_locations ADD CONSTRAINT fk_store_locations_location FOREIGN KEY (location_id) REFERENCES locations (location_id), ADD CONSTRAINT fk_store_locations_store FOREIGN KEY (store_id) REFERENCES stores (store_id);" }
+    - { query: "ALTER TABLE supplies_warehouses ADD CONSTRAINT fk_supplies_warehouses_supply FOREIGN KEY (supply_id) REFERENCES supplies (supply_id), ADD CONSTRAINT fk_supplies_warehouses_warehouses FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id);" }
+    - { query: "ALTER TABLE external_supplies_products ADD CONSTRAINT fk_external_supplies_products_ext_supply FOREIGN KEY (ext_supply_id) REFERENCES external_supplies (ext_supply_id), ADD CONSTRAINT fk_external_supplies_products_product FOREIGN KEY (product_id) REFERENCES products (product_id);" }
+    - { query: "ALTER TABLE external_supplies_warehouses ADD CONSTRAINT fk_external_supplies_warehouses_ext_supply FOREIGN KEY (ext_supply_id) REFERENCES external_supplies (ext_supply_id), ADD CONSTRAINT fk_external_supplies_warehouses_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id), ADD CONSTRAINT fk_external_supplies_warehouses_shelve FOREIGN KEY (shelve_id) REFERENCES shelves (shelve_id);" }
+    - { query: "ALTER TABLE product_check_positions ADD CONSTRAINT fk_product_check_positions_check FOREIGN KEY (check_id) REFERENCES checks (check_id), ADD CONSTRAINT fk_product_check_positions_product FOREIGN KEY (product_id) REFERENCES products (product_id);" }
+    - { query: "ALTER TABLE products_on_shelves ADD CONSTRAINT fk_products_on_shelves_product FOREIGN KEY (product_id) REFERENCES products (product_id), ADD CONSTRAINT fk_products_on_shelves_shelve FOREIGN KEY (shelve_id) REFERENCES shelves (shelve_id);" }
+    - { query: "ALTER TABLE supplies_products ADD CONSTRAINT fk_supplies_products_supply FOREIGN KEY (supply_id) REFERENCES supplies (supply_id), ADD CONSTRAINT fk_supplies_products_product FOREIGN KEY (product_id) REFERENCES products (product_id);" }
+  ignore_errors: True
+  tags: create-foreign-key
+
+
+- name: Create indexes
+  community.postgresql.postgresql_idx:
+    login_host: "{{ db_ip }}"
+    db: "{{ db_name }}"
+    table: "{{ item.table }}"
+    columns: "{{ item.columns }}"
+    name: "{{ item.name }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_password }}"
+    schema: "{{ schema }}"
+  with_items:
+    - { name: "categories_idx", table: "categories", columns: "category_id" }
+    - { name: "checks_idx", table: "checks", columns: "check_id" }
+    - { name: "checks_stores_idx", table: "checks_stores", columns: "check_id, store_id" }
+    - { name: "external_supplies_idx", table: "external_supplies", columns: "ext_supply_id" }
+    - { name: "external_supplies_products_idx", table: "external_supplies_products", columns: "ext_supply_id, product_id" }
+    - { name: "external_supplies_warehouses_idx", table: "external_supplies_warehouses", columns: "ext_supply_id, warehouse_id, shelve_id" }
+    - { name: "locations_idx", table: "locations", columns: "location_id" }
+    - { name: "products_idx", table: "products", columns: "product_id" }
+    - { name: "products_on_shelves_idx", table: "products_on_shelves", columns: "product_id, shelve_id" }
+    - { name: "shelves_idx", table: "shelves", columns: "shelve_id" }
+    - { name: "store_locations_idx", table: "store_locations", columns: "store_id, location_id" }
+    - { name: "stores_idx", table: "stores", columns: "store_id" }
+    - { name: "supplies_idx", table: "supplies", columns: "supply_id" }
+    - { name: "supplies_products_idx", table: "supplies_products", columns: "supply_id, product_id" }
+    - { name: "supplies_warehouses_idx", table: "supplies_warehouses", columns: "supply_id, warehouse_id, shelve_id" }
+    - { name: "supplies_stores_idx", table: "supplies_stores", columns: "supply_id, store_id" }
+    - { name: "warehouse_locations_idx", table: "warehouse_locations", columns: "warehouse_id, location_id" }
+    - { name: "warehouse_shelves_idx", table: "warehouse_shelves", columns: "warehouse_id, shelve_id" }
+    - { name: "warehouses_idx", table: "warehouses", columns: "warehouse_id" }
+  tags: create-index
