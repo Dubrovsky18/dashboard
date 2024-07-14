@@ -4,7 +4,7 @@
   roles:
     - keys_and_index
   vars:
-    schema: prod
+    schema: small
   tags: index
   
 - name: Create MATERIALIZED VIEW
@@ -12,7 +12,7 @@
   roles:
     - materialized
   vars:
-    schema: prod
+    schema: small
   tags: materialized-view
 
 - name: Mod database
@@ -20,5 +20,5 @@
   roles:
     - tuning
   vars:
-    schema: prod
+    schema: small
   tags: mod-database
