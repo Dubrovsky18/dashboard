@@ -5,6 +5,22 @@ import streamlit as st
 import time
 # from sshtunnel import SSHTunnelForwarder
 
+# tunnel = SSHTunnelForwarder(
+#     ('62.84.126.82', 22),
+#     ssh_username='dubrovin02',
+#     ssh_private_key='/Users/test/.ssh/id_rsa',
+#     remote_bind_address=('localhost', 5432),
+# )
+# tunnel.start()
+
+# conn = psycopg2.connect(
+#     database='appdb',
+#     user='app',
+#     password='verysecretpassword',
+#     host=tunnel.local_bind_host,
+#     port=tunnel.local_bind_port,
+#     options=f'-c search_path={schema}'
+# )
 
 
 def execute_query(sql_query, conn):
@@ -30,15 +46,6 @@ SELECT * FROM mv_shelve_count
 ORDER BY category_name ASC;
         """
 
-# tunnel = SSHTunnelForwarder(
-#     ('62.84.126.82', 22),
-#     ssh_username='dubrovin02',
-#     ssh_private_key='/Users/test/.ssh/id_rsa',
-#     remote_bind_address=('localhost', 5432),
-# )
-
-# tunnel.start()
-
 
 
 schema = st.selectbox('Select schema', ('small', 'prod'), key='schema_selector')
@@ -54,14 +61,7 @@ conn = psycopg2.connect(
     options=f'-c search_path={schema}'
 )
 
-# conn = psycopg2.connect(
-#     database='appdb',
-#     user='app',
-#     password='verysecretpassword',
-#     host=tunnel.local_bind_host,
-#     port=tunnel.local_bind_port,
-#     options=f'-c search_path={schema}'
-# )
+
 
 external_supplies_data = execute_query(query_external_supplies, conn)
 checks_data = execute_query(query_checks, conn)
@@ -110,8 +110,6 @@ diffs = {}
 offset = 0
 
 for event_date in reversed(sorted(events.keys())):
-
-
     day_events = events[event_date]
     if offset != 0:
         for category in graph_data:
@@ -128,6 +126,7 @@ for event_date in reversed(sorted(events.keys())):
                 diffs[category] = 0
             diffs[category] -= event['data']['product_count']
     offset += 1
+
 data = pd.DataFrame(data=graph_data, index=index)
 elapsed_time = time.time() - start_time
 print(elapsed_time)
