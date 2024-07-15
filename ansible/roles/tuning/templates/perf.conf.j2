@@ -1,9 +1,8 @@
+shared_buffers = 256MB
+max_connections = 100
+effective_cache_size = 256MB
 
-hared_buffers = 1GB
-max_connections = 1024
-effective_cache_size = 512MB
-
-work_mem = 254MB
+work_mem = 256MB
 max_worker_processes = 4
 max_parallel_workers = 4
 max_parallel_maintenance_workers = 4
@@ -20,4 +19,4 @@ huge_pages = off
 wal_buffers = 64MB
 temp_buffers = 64MB
 min_wal_size = 256MB
-max_wal_size = 1GB
+max_wal_size = 512MB

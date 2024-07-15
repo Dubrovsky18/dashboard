@@ -1,2 +1,2 @@
 [db_servers]
-localhost anible_port=22 ansible_user=root ansible_ssh_common_args='-J dubrovin02@62.84.126.82'
+158.160.116.94 ansible_port=22 ansible_user=root

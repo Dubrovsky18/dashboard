@@ -6,6 +6,7 @@
     owner: postgres
     group: postgres
 
+
 - name: restart postgres
   service: name=postgresql state=restarted
   tags: restart-pgsql
