@@ -38,6 +38,7 @@ CREATE MATERIALIZED VIEW small.mv_shelve_count AS
     GROUP BY c.name;
 
 
+
 drop materialized view if exists prod.mv_shelve_count cascade;
 CREATE MATERIALIZED VIEW prod.mv_shelve_count AS
 SELECT c.name AS category_name, SUM(pos.product_count) AS shelves_count
@@ -78,3 +79,6 @@ GROUP BY
     c.issue_date, cat.name;
 
 
+REFRESH MATERIALIZED VIEW mv_shelve_count;
+REFRESH MATERIALIZED VIEW mv_external_supplies;
+REFRESH MATERIALIZED VIEW mv_product_summary;
