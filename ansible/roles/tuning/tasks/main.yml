@@ -5,8 +5,12 @@
     dest: /etc/postgresql/16/main/conf.d/perf.conf
     owner: postgres
     group: postgres
+  ignore_errors: True
+
 
 
 - name: restart postgres
   service: name=postgresql state=restarted
   tags: restart-pgsql
+  ignore_errors: True
+
