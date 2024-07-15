@@ -46,7 +46,6 @@ GROUP BY
     es.finish_date, c.name
 ORDER BY
     es.finish_date;
-
         """
 
 query_checks = """
