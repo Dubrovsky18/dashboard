@@ -1,2 +1,2 @@
 [db_servers]
-158.160.116.94 ansible_port=22 ansible_user=root
+localhost ansible_port=22 ansible_user=root

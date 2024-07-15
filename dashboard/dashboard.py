@@ -91,8 +91,9 @@ conn = psycopg2.connect(
     password='verysecretpassword',
     host='localhost',
     port=5432,
-    options=f'-c search_path={schema}'
+    options=f'-c search_path={schema} -c work_mem=512MB'
 )
+
 
 external_supplies_data = execute_query(query_external_supplies, conn)
 checks_data = execute_query(query_checks, conn)

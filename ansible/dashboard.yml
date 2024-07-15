@@ -14,9 +14,3 @@
   vars:
     schema: prod
   tags: materialized-view
-
-- name: Mod database
-  hosts: db_servers
-  roles:
-    - tuning
-  tags: mod-database
