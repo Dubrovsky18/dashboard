@@ -10,15 +10,12 @@ ALTER TABLE shelves ADD PRIMARY KEY (shelve_id);
 
 ALTER TABLE checks_stores ADD CONSTRAINT fk_checks_stores_check FOREIGN KEY (check_id) REFERENCES checks (check_id), ADD CONSTRAINT fk_checks_stores_store FOREIGN KEY (store_id) REFERENCES stores (store_id);
 ALTER TABLE supplies_stores ADD CONSTRAINT fk_supplies_stores_supply FOREIGN KEY (supply_id) REFERENCES supplies (supply_id), ADD CONSTRAINT fk_supplies_stores_store FOREIGN KEY (store_id) REFERENCES stores (store_id);
-ALTER TABLE warehouse_shelves ADD CONSTRAINT fk_warehouse_shelves_shelve FOREIGN KEY (shelve_id) REFERENCES shelves (shelve_id), ADD CONSTRAINT fk_warehouse_shelves_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id);
 ALTER TABLE product_categories ADD CONSTRAINT fk_product_categories_product FOREIGN KEY (product_id) REFERENCES products (product_id), ADD CONSTRAINT fk_product_categories_category FOREIGN KEY (category_id) REFERENCES categories (category_id);
 ALTER TABLE warehouse_locations ADD CONSTRAINT fk_warehouse_locations_location FOREIGN KEY (location_id) REFERENCES locations (location_id), ADD CONSTRAINT fk_warehouse_locations_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id);
 ALTER TABLE store_locations ADD CONSTRAINT fk_store_locations_location FOREIGN KEY (location_id) REFERENCES locations (location_id), ADD CONSTRAINT fk_store_locations_store FOREIGN KEY (store_id) REFERENCES stores (store_id);
 ALTER TABLE supplies_warehouses ADD CONSTRAINT fk_supplies_warehouses_supply FOREIGN KEY (supply_id) REFERENCES supplies (supply_id), ADD CONSTRAINT fk_supplies_warehouses_warehouses FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id);
 ALTER TABLE external_supplies_products ADD CONSTRAINT fk_external_supplies_products_ext_supply FOREIGN KEY (ext_supply_id) REFERENCES external_supplies (ext_supply_id), ADD CONSTRAINT fk_external_supplies_products_product FOREIGN KEY (product_id) REFERENCES products (product_id);
-ALTER TABLE external_supplies_warehouses ADD CONSTRAINT fk_external_supplies_warehouses_ext_supply FOREIGN KEY (ext_supply_id) REFERENCES external_supplies (ext_supply_id), ADD CONSTRAINT fk_external_supplies_warehouses_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id), ADD CONSTRAINT fk_external_supplies_warehouses_shelve FOREIGN KEY (shelve_id) REFERENCES shelves (shelve_id);
 ALTER TABLE product_check_positions ADD CONSTRAINT fk_product_check_positions_check FOREIGN KEY (check_id) REFERENCES checks (check_id), ADD CONSTRAINT fk_product_check_positions_product FOREIGN KEY (product_id) REFERENCES products (product_id);
-ALTER TABLE products_on_shelves ADD CONSTRAINT fk_products_on_shelves_product FOREIGN KEY (product_id) REFERENCES products (product_id), ADD CONSTRAINT fk_products_on_shelves_shelve FOREIGN KEY (shelve_id) REFERENCES shelves (shelve_id);
 ALTER TABLE supplies_products ADD CONSTRAINT fk_supplies_products_supply FOREIGN KEY (supply_id) REFERENCES supplies (supply_id), ADD CONSTRAINT fk_supplies_products_product FOREIGN KEY (product_id) REFERENCES products (product_id);
 
 CREATE INDEX categories_idx ON categories (category_id);
